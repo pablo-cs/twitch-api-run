@@ -6,6 +6,7 @@ from datetime import datetime
 CLIENT_ID = os.environ.get('TWITCH_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('TWITCH_CLIENT_SECRET')
 
+## Authentication Set-up
 AUTH_URL = 'https://id.twitch.tv/oauth2/token'
 
 auth_response = requests.post(AUTH_URL, {
@@ -13,27 +14,37 @@ auth_response = requests.post(AUTH_URL, {
     'client_secret': CLIENT_SECRET,
     'grant_type': 'client_credentials',
 })
+
 auth_response_data = auth_response.json()
 print(auth_response_data)
 access_token = auth_response_data['access_token']
-
 headers = {'Authorization': 'Bearer {token}'.format(token=access_token),
           'Client-Id': CLIENT_ID}
+
 BASE_URL = 'https://api.twitch.tv/helix'
+
+##Asks user to input username of a Twitch account
 user_name = ''
 while True:
   user_name = input('Enter username to search or QUIT: ')
   if user_name.upper() == 'QUIT':
     break
+
+  ##Requests the user's information and converts to json
   user_req = requests.get(BASE_URL + '/users?login=' + user_name, headers=headers)
   user_data = user_req.json()['data']
   
+  ##Checks if user was found, if not then their data list would be empty
   if len(user_data) != 0:
     print('------------------')
     user_data = user_req.json()['data'][0]
     user_id = user_data['id']
+
+    ##Requests the follower data of the user
     followers_req = requests.get(BASE_URL + '/channels/followers?broadcaster_id=' + user_id, headers=headers)
     followers_data = followers_req.json()
+    
+    ##Prints out the informations on the user
     print("User found!")
     print("Name:", user_data['display_name'])
     print("Description:", user_data['description'])
@@ -41,8 +52,12 @@ while True:
     print("Broadcaster Type:", user_data['broadcaster_type'])
     print("Member since:", datetime.strptime(user_data['created_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
     print("Most recent videos - ")
+    
+    ##Requests information on the user's videos
     video_req = requests.get(BASE_URL + '/videos?user_id=' + user_id, headers=headers)
     video_data = video_req.json()['data']
+    
+    ##Prints out information on the 5 (at most) most recent videos
     i = 0
     while i < 5 and i < len(video_data):
       curr_vid = video_data[i]
