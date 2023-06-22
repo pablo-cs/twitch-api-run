@@ -27,13 +27,17 @@ while True:
     break
   user_req = requests.get(BASE_URL + '/users?login=' + user_name, headers=headers)
   user_data = user_req.json()['data']
+  
   if len(user_data) != 0:
     print('------------------')
     user_data = user_req.json()['data'][0]
     user_id = user_data['id']
+    followers_req = requests.get(BASE_URL + '/channels/followers?broadcaster_id=' + user_id, headers=headers)
+    followers_data = followers_req.json()
     print("User found!")
     print("Name:", user_data['display_name'])
     print("Description:", user_data['description'])
+    print("Follower count:", format(followers_data['total'],","))
     print("Broadcaster Type:", user_data['broadcaster_type'])
     print("Member since:", datetime.strptime(user_data['created_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
     print("Most recent videos - ")
@@ -44,7 +48,7 @@ while True:
       curr_vid = video_data[i]
       print("Title:", curr_vid['title'])
       print("Posted:", datetime.strptime(curr_vid['published_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
-      print("Views:", curr_vid['view_count'])
+      print("Views:", format(curr_vid['view_count'],","))
       i+=1
     print('------------------')
   else:
