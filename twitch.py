@@ -31,6 +31,8 @@ def generate_headers():
 
 
 def get_user_data(user_name, headers):
+    if len(user_name) == 0 or ' ' in user_name:
+        return None
     # Requests the user's information and converts to JSON
     user_req = requests.get(BASE_URL +
                             '/users?login=' +
@@ -119,7 +121,7 @@ def main():
         user_name = input('Enter username to search and add or QUIT: ')
         if user_name.upper() == 'QUIT':
             break
-        user_data = get_user_data(user_name, headers)
+        user_data = get_user_data(user_name.strip(), headers)
         if user_data:
             user_data_list.append(user_data)
             print_info(user_data)
