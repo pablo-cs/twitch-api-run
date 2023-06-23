@@ -91,7 +91,7 @@ def print_info(user_data):
 def print_sql(user_data_list, engine):
     if len(user_data_list) > 0:
         print('Here are all the streamers you added')
-    
+
         # Creates dataframes and SQL stuff using a list of users' dictionaries
         df = pd.DataFrame(user_data_list)
         df = df.drop('video_data', axis=1)
