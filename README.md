@@ -1,4 +1,5 @@
 # Twitch API Search Sim
+[![Style Checker Workflow](https://github.com/pablo-cs/twitch-api-run/actions/workflows/style.yaml/badge.svg)](https://github.com/pablo-cs/twitch-api-run/actions/workflows/style.yaml)
 
 ## Description
 
