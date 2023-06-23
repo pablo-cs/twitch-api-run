@@ -31,7 +31,10 @@ export TWITCH_CLIENT_ID=[variable_value]
 `
 export TWITCH_CLIENT_SECRET=[variable_value]
 `
-
+Then:
+`
+source ~/.bashrc
+`
 ### Install libraries
 Final step, install the twitchAPI python library:
 `
