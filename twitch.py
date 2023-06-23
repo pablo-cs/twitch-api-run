@@ -43,7 +43,9 @@ while True:
         break
 
     # Requests the user's information and converts to JSON
-    user_req = requests.get(BASE_URL + '/users?login=' + user_name, headers=headers)
+    user_req = requests.get(BASE_URL +
+                            '/users?login=' +
+                            user_name, headers=headers)
     user_data = user_req.json()['data']
 
     # Checks if user was found, if not then their data list would be empty
@@ -55,7 +57,10 @@ while True:
         user_id = user_data['id']
 
         # Requests the follower data of the user and stores it in the user data
-        followers_req = requests.get(BASE_URL + '/channels/followers?broadcaster_id=' + user_id, headers=headers)
+        followers_req = requests.get(BASE_URL +
+                                     '/channels/followers?broadcaster_id=' +
+                                     user_id, headers=headers)
+
         user_data['follower_count'] = followers_req.json()['total']
 
         # Prints out the information on the user
@@ -65,11 +70,14 @@ while True:
         print("Follower count:", format(user_data['follower_count'], ","))
         print("Broadcaster Type:", user_data['broadcaster_type'])
         print("Member since:",
-              datetime.strptime(user_data['created_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
+              datetime.strptime(user_data['created_at'],
+                                "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
         print("Most recent videos - ")
 
         # Requests information on the user's videos
-        video_req = requests.get(BASE_URL + '/videos?user_id=' + user_id, headers=headers)
+        video_req = requests.get(BASE_URL +
+                                 '/videos?user_id=' +
+                                 user_id, headers=headers)
         video_data = video_req.json()['data']
 
         # Prints out information on the 5 (at most) most recent videos
@@ -77,7 +85,6 @@ while True:
         while i < 5 and i < len(video_data):
             curr_vid = video_data[i]
             print("Title:", curr_vid['title'])
-            # print("Posted:", datetime.strptime(curr_vid['published_at'], "%Y-%m-%dT%H:%M:%SZ").strftime("%B %d, %Y"))
             print("Views:", format(curr_vid['view_count'], ","))
             i += 1
         print('------------------')
@@ -91,6 +98,8 @@ if len(user_data_list) > 0:
     df.to_sql('users', con=engine, if_exists='replace', index=False)
 
     with engine.connect() as connection:
-        query_result = connection.execute(db.text("SELECT display_name, broadcaster_type, follower_count, created_at FROM users;")).fetchall()
+        columns = "display_name, broadcaster_type, follower_count"
+        query = "SELECT" + columns + "created_at FROM users;"
+        query_result = connection.execute(db.text(query)).fetchall()
         print(pd.DataFrame(query_result))
 print('Bye!')
