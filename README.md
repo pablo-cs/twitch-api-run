@@ -27,6 +27,8 @@ Scroll down and add the following variables:
 
 `
 export TWITCH_CLIENT_ID=[variable_value]
+`
+`
 export TWITCH_CLIENT_SECRET=[variable_value]
 `
 
