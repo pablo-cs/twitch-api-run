@@ -43,3 +43,14 @@ To run, execute the following command in the directory twitch.py is located:
 `
 python3 twitch.py
 `
+
+## How this Code Works
+
+The code uses the TwitchAPI to fetch information from the users search for and provide
+corresponding public information about their Twitch profile. The code asks for the user's username, 
+from the the TwitchAPI is queried to find a user with the matching username. If such a user is found, 
+that user's unique ID, along with other data, is shared and put into a dictionary. Using that dictionary,
+relevant information is printed by the program. Using the user's ID that is obtained from the API,
+the code than queries the TwitchAPI to search for videos with a matching user ID (since they can't be searched
+by directly using the username like with the user itself). The program then prints the most recent 5 videos on
+channel.
