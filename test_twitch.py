@@ -16,7 +16,7 @@ class TwitchAPITestCase(unittest.TestCase):
                 'display_name': 'TwitchDev',
                 'type': '',
                 'broadcaster_type': 'partner',
-                'description': 'Supporting third-party developers',
+                'description': 'Supporting third-party developers.',
                 'profile_image_url': 'n/a',
                 'offline_image_url': 'n/a',
                 'view_count': 5980557,
