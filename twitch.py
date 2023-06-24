@@ -143,9 +143,8 @@ def main():
 
     while True:
         user_name = input('Enter username to search and add or QUIT: ')
-        
         print('------------------')
-        
+
         if user_name.upper() == 'QUIT':
             break
         user_data = get_user_data(user_name.strip(), headers)
