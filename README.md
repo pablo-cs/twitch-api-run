@@ -1,4 +1,7 @@
-# Twitch API Search Sim
+# <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/twitch.svg" alt="Twitch Icon" width="24" height="24"> Heading Text
+
+
+
 [![Style Checker Workflow](https://github.com/pablo-cs/twitch-api-run/actions/workflows/style.yaml/badge.svg)](https://github.com/pablo-cs/twitch-api-run/actions/workflows/style.yaml)
 [![Test Checker Workflow](https://github.com/pablo-cs/twitch-api-run/actions/workflows/tests.yaml/badge.svg)](https://github.com/pablo-cs/twitch-api-run/actions/workflows/tests.yaml)
 
