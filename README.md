@@ -58,8 +58,7 @@ source ~/.bashrc
 ### Install libraries
 Final step, install the following python libraries:
 ```
-pip install twitchAPI pandas requests sqlalchemy unittest
-
+pip install twitchAPI pandas requests sqlalchemy pytest
 ```
 
 ## How to Run
@@ -68,6 +67,62 @@ pip install twitchAPI pandas requests sqlalchemy unittest
 
 ```
 python3 twitch.py
+```
+
+Sample output:
+```Enter username to search and add or QUIT: Miniminter
+------------------
+User found!
+Name: miniminter
+Description: Professional Simon
+Follower count: 1,921,105
+Broadcaster Type: partner
+Member since: February 01, 2013
+Last played: Overwatch 2
+Most Recent Videos:
+
+Title: SIMON REACTS!
+Views: 50,340
+Posted: November 02, 2022
+------------------
+Enter username to search and add or QUIT: Shofu
+------------------
+User found!
+Name: shofu
+Description: WDFA. Business Inquires: shofubiz@gmail.com
+Follower count: 266,587
+Broadcaster Type: partner
+Member since: February 10, 2009
+Last played: Street Fighter 6
+Most Recent Videos:
+
+Title: back on the dee jay !merch
+Views: 18,992
+Posted: June 22, 2023
+
+Title: Highlight: whats this nintendo direct talkin bout?? !merch
+Views: 385
+Posted: June 21, 2023
+
+Title: whats this nintendo direct talkin bout?? !merch
+Views: 19,592
+Posted: June 21, 2023
+
+Title: skreet fighter !merch
+Views: 7,851
+Posted: June 20, 2023
+
+Title: in the dee jay lab !merch
+Views: 35,207
+Posted: June 19, 2023
+------------------
+Enter username to search and add or QUIT: quit
+------------------
+Here are all the streamers you added
+  display_name broadcaster_type  follower_count
+0   miniminter          partner         1921105
+1        shofu          partner          266587
+Bye!
 ```
 
 ## How this Code Works
