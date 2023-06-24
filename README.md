@@ -70,7 +70,8 @@ python3 twitch.py
 ```
 
 Sample output:
-```Enter username to search and add or QUIT: Miniminter
+```
+Enter username to search and add or QUIT: Miniminter
 ------------------
 User found!
 Name: miniminter
