@@ -46,10 +46,26 @@ source ~/.bashrc
 `
 
 ### Install libraries
-Final step, install the twitchAPI python library:
+Final step, install the following python libraries:
 
 `
 pip install twitchAPI
+`
+
+`
+pip install pandas
+`
+
+`
+pip install requests
+`
+
+`
+pip install sqlalchemy
+`
+
+`
+pip install unittest
 `
 
 ## How to Run
