@@ -89,7 +89,38 @@ class TwitchAPITestCase(unittest.TestCase):
         }
 
         self.assertEqual(user_data, expected_user_data)
+    
+    
+    def test_user_to_str(self):
+        user_data = {
+            'id': '141981764',
+            'login': 'twitchdev',
+            'display_name': 'TwitchDev',
+            'type': '',
+            'broadcaster_type': 'partner',
+            'description': 'Supporting third-party developers.',
+            'profile_image_url': 'n/a',
+            'offline_image_url': 'n/a',
+            'view_count': 5980557,
+            'email': 'not-real@email.com',
+            'created_at': '2016-12-14T20:32:28Z',
+            'follower_count': 8,
+            'last_game_played': 'Science & Technology',
+            'video_data': []
+        }
 
+        
+        expected_user_string = "Name: TwitchDev\
+                                \nDescription: Supporting third-party developers.\
+                                \nFollower count: 8\
+                                \nBroadcaster Type: partner\
+                                \nMember since: December 14, 2016\
+                                \nLast played: Science & Technology\
+                                \nMost Recent Videos:\
+                                \n                        \
+                                \nTitle: SIMON REACTS!      \
+                                \nViews: 50,340 \
+                                Posted: November 02, 2022"
 
 if __name__ == '__main__':
     unittest.main()

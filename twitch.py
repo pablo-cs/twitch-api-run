@@ -10,7 +10,7 @@ CLIENT_ID = os.environ.get('TWITCH_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('TWITCH_CLIENT_SECRET')
 AUTH_URL = 'https://id.twitch.tv/oauth2/token'
 BASE_URL = 'https://api.twitch.tv/helix'
-
+engine = db.create_engine('sqlite:///users.db')
 
 def generate_headers():
     """
@@ -114,14 +114,18 @@ def user_to_str(user_data):
     return user_str
 
 
-def print_sql(user_data_list, engine):
+def update_sql(user_data_list):
+    """"
+    Updates the user database to include the streamers
+    added to the list of users
+    """
     if len(user_data_list) > 0:
         print('Here are all the streamers you added')
 
         # Creates dataframes and SQL stuff using a list of users' dictionaries
         df = pd.DataFrame(user_data_list)
         df = df.drop('video_data', axis=1)
-        df.to_sql('users', con=engine, if_exists='replace', index=False)
+        df.to_sql('users', con=engine, if_exists='append', index=False)
 
         with engine.connect() as connection:
             columns = "display_name, broadcaster_type, follower_count"
@@ -134,7 +138,6 @@ def print_sql(user_data_list, engine):
 def main():
     headers = generate_headers()
     # Setup engine for SQL interaction
-    engine = db.create_engine('sqlite:///users.db')
 
     # Asks user to input username of a Twitch account
     user_name = ''
@@ -150,13 +153,14 @@ def main():
         user_data = get_user_data(user_name.strip(), headers)
         if user_data:
             print("User found!")
-            user_data_list.append(user_data)
+            if user_data not in user_data_list:
+                user_data_list.append(user_data)
             print(user_to_str(user_data))
         else:
             print("User not found :(")
         print('------------------')
 
-    print_sql(user_data_list, engine)
+    update_sql(user_data_list)
 
 
 if __name__ == '__main__':
