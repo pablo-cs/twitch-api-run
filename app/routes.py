@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from twitch_api import generate_headers, get_user_data, update_sql
+from .twitch_api import generate_headers, get_user_data, update_sql
 
 app = Flask(__name__)
 
