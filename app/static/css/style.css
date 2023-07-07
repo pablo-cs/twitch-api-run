@@ -1,0 +1,27 @@
+body{
+    background-color: #624CAB;
+    color: #C1CEFE;
+    margin:;20em
+}
+
+.profile-pic{
+    border-radius: 10%;
+    box-shadow: 2px 2px 10px 3px black;
+    width: 10em;
+    height: 10em;
+}
+
+.creator-name{
+    font-weight: bold;
+}
+
+.vid-card{
+    flex: 0 0 300px;
+    background-color: #7189FF;
+    color:#00147A;
+    padding: 1%;
+    margin: 1%;
+    text-align: center;
+    border-radius: 7px;
+    align-items: center;
+}

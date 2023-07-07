@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2 class="creator-name">{{ streamer }}</h2>
+    <p>{{ description }}</p>
+    <img class= "profile-pic" src={{ img_src }} alt="Profile Pic">
+    <form action="{{ url_for('add') }}"" method="POST">
+        <button type="submit">ADD</button>
+    </form>
+    <h3>Followers: {{ followers }}</h3>
+    <h3>Broadcaster Type: {{ broadcaster_type }}</h3>
+    <h3>Last Played: {{ last_played }}</h3>
+    <h3>Member since : {{ created_at }}</h3>
+    {% if videos %}
+        <h3>Most Recent Videos:</h3>
+        {% for video in videos %}
+            <div class="vid-card">
+                <h4>Title: {{ video['title'] }}</h4>
+                <img src="{{ video['thumbnail_url']|replace('%{width}', '200')|replace('%{height}', '150') }}" alt="Thumbnail">
+                <p>Views: {{ video['view_count']|format }}</p>
+                <p>Posted: {{ video['published_at'] }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No videos found.</p>
+    {% endif %}
+
+{% endblock content %}
