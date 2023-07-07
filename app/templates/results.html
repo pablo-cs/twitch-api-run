@@ -6,7 +6,7 @@
         <h2 class="creator-name">{{ streamer }}</h2>
         <p>{{ description }}</p>
         <img class= "profile-pic" src={{ img_src }} alt="Profile Pic">
-        <form action="{{ url_for('add') }}"" method="POST">
+        <form action="{{ url_for('add') }}" method="POST">
             <button type="submit">ADD</button>
         </form>
         <h3>Followers: {{ followers }}</h3>

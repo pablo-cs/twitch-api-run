@@ -77,7 +77,16 @@ def get_user_data(user_name, headers):
                                     '/videos?user_id=' +
                                     user_id,
                                     headers=headers)
-        user_data['video_data'] = video_req.json()['data']
+        user_data['video_data'] = video_req.json()['data'][:5]
+        for i in range(len(user_data['video_data'])):
+            vid_date = user_data['video_data'][i]['published_at']
+            try:
+                vid_date = datetime.strptime(vid_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            except ValueError:
+                vid_date = datetime.strptime(vid_date, "%Y-%m-%dT%H:%M:%SZ")
+            vid_date = vid_date.strftime("%B %d, %Y")
+            user_data['video_data'][i]['published_at'] = vid_date
+
         user_data['created_at'] =  datetime.strptime(
         user_data_json['created_at'], "%Y-%m-%dT%H:%M:%SZ"
     ).strftime("%B %d, %Y")
