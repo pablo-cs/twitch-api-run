@@ -17,8 +17,11 @@
             <button type="submit">Search</button>
         </form>
     
-    <form action="{{ url_for('view') }}" method="POST">
+    <form action="{{ url_for('view_fav') }}" method="POST">
             <button type="submit">View Favorites</button>
+    </form>
+    <form action="{{ url_for('view_pop') }}" method="POST">
+            <button type="submit">View Popular</button>
     </form>
     {% block content %}{% endblock %}
 

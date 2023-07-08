@@ -31,8 +31,8 @@ def generate_headers():
         'Client-Id': CLIENT_ID
     }
     return headers
-
-
+    
+                            
 def get_user_data(user_name, headers):
     """
     Returns a dictionary of Twitch user data, given their username
@@ -96,6 +96,15 @@ def get_user_data(user_name, headers):
     else:
         return None
 
+def get_popular_users(headers):
+    popular_req = requests.get(BASE_URL +
+                            '/search/channels?query=gaming&live_only=true', 
+                            headers=headers)
+    pop_data = popular_req.json()['data']
+    pop_users = []
+    for user in pop_data:
+        pop_users.append(get_user_data(user['broadcaster_login'],headers))
+    return pop_users
 
 def update_sql(user_data_list):
     """"
