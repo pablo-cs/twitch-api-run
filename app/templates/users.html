@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2> Favorites </h2>
+    <div class="streamer-container">
+    {% for streamer in streamers %}
+    <div class = "streamer-card">
+        <img class= "profile-pic" src="{{ streamer['img_src'] }}" alt="Profile Pic">
+            <form action="{{ url_for('search') }}" method="POST">
+                <input type="hidden" name="search" value="{{ streamer['name'] }}">
+                <button type="submit">{{ streamer['name'] }}</button>
+        </form>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock content %}

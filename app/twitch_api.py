@@ -37,7 +37,7 @@ def get_user_data(user_name, headers):
     """
     Returns a dictionary of Twitch user data, given their username
     """
-    if len(user_name) == 0 or ' ' in user_name:
+    if not user_name or len(user_name) == 0 or ' ' in user_name:
         return None
     # Requests the user's information and converts to JSON
     user_req = requests.get(BASE_URL +
@@ -50,6 +50,7 @@ def get_user_data(user_name, headers):
         user_data_json = user_req.json()['data'][0]
 
         user_id = user_data_json['id']
+        user_data['id'] = user_id
         user_data['name'] = user_data_json['display_name']
         user_data['description'] = user_data_json['description']
         user_data['broadcaster_type'] = user_data_json['broadcaster_type']

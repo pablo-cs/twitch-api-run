@@ -15,29 +15,25 @@ body{
     font-weight: bold;
 }
 
-.vid-card{
-    flex: 0 0 300px;
-    background-color: #7189FF;
-    color:#00147A;
-    padding: 1%;
-    margin: 1%;
-    text-align: center;
-    border-radius: 7px;
-    align-items: center;
-}
-.vid-container {
+.vid-container, .streamer-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-.vid-card {
+.vid-card, .streamer-card {
     flex: 1 0 calc(33.33% - 10px); 
     margin-bottom: 20px;
-    background-color: #7189FF;
-    color:#00147A;
     padding: 1%;
     margin: 1%;
+    border-radius: 7px;
+    text-align: center;
+    align-items: center;
     flex-direction: column;
+}
+
+.vid-card{
+    background-color: #7189FF;
+    color:#00147A;
 }
 .title {
     flex-grow: 1;
