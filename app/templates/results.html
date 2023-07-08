@@ -3,28 +3,31 @@
     {% if streamer == None %}
         <h2>User Not Found</h2>
     {% else %}
-        <h2 class="creator-name twitch-style"> <a href="{{ url }}">{{ streamer }}</a> </h2>
-        <br>
-        <p>{{ description }}</p>
-        <img class= "profile-pic" src={{ img_src }} alt="Profile Pic">
-        {% if in_db %}
-            <form action="{{ url_for('remove') }}"" method="POST">
-            <input type="hidden" name="removed_user" value="{{ streamer }}">
-                <button type="submit">REMOVE</button>
-            </form>  
-        {% else %}
-            <form action="{{ url_for('add') }}"" method="POST">
-            <input type="hidden" name="added_user" value="{{ streamer }}">
-                <button type="submit">ADD</button>
-            </form>
-        {% endif %}
         
-        
+            <br>
+            <h2 class="creator-name twitch-style"> <a href="{{ url }}">{{ streamer }}</a> </h2>
+            <br>
+            {% if in_db %}
+                <form action="{{ url_for('remove') }}"" method="POST">
+                <input type="hidden" name="removed_user" value="{{ streamer }}">
+                    <button type="submit">REMOVE</button>
+                </form>  
+            {% else %}
+                <form action="{{ url_for('add') }}"" method="POST">
+                <input type="hidden" name="added_user" value="{{ streamer }}">
+                    <button type="submit">ADD</button>
+                </form>
+            {% endif %}
+            <p>{{ description }}</p>
+            <div class="profile-container">
+            <img class= "profile-pic profile-item" src={{ img_src }} alt="Profile Pic">
+            
 
-        <h3>Followers: {{ followers }}</h3>
-        <h3>Broadcaster Type: {{ broadcaster_type }}</h3>
-        <h3>Last Played: {{ last_played }}</h3>
-        <h3>Member since : {{ created_at }}</h3>
+            <h3 class="profile-item">Followers: {{ followers }}</h3>
+            <h3 class="profile-item">Broadcaster Type: {{ broadcaster_type }}</h3>
+            <h3 class="profile-item">Last Played: {{ last_played }}</h3>
+            <h3 class="profile-item">Member since : {{ created_at }}</h3>
+        </div>
         {% if videos %}
             <h3>Most Recent Videos:</h3>
             <div class="vid-container">

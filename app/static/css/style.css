@@ -55,5 +55,17 @@ button{
     word-wrap: break-word;
 }
 
+.profile-container {
+    background-color: #C1CEFE;
+    color:#624cab;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.profile-item {
+    border: 1px solid #C1CEFE;
+    font-weight: bolder;
+    margin: auto;
+}
 
 
