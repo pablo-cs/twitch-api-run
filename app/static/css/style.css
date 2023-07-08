@@ -1,9 +1,16 @@
+@font-face {
+  font-family: 'TwitchyTV';
+  src: url('../fonts/TwitchyTV.otf') format('opentype');
+}
 body{
+    
     background-color: #624CAB;
     color: #C1CEFE;
-    margin:;20em
 }
 
+.twitch-style{
+    font-family: 'TwitchyTV', sans-serif;
+}
 .profile-pic{
     border-radius: 10%;
     box-shadow: 2px 2px 2px 1px black;
@@ -24,19 +31,29 @@ body{
     flex: 1 0 calc(33.33% - 10px); 
     margin-bottom: 20px;
     padding: 1%;
-    margin: 1%;
+    margin: 2%;
     border-radius: 7px;
     text-align: center;
     align-items: center;
     flex-direction: column;
+}
+button{
+    border-radius: 5px;
 }
 
 .vid-card{
     background-color: #7189FF;
     color:#00147A;
 }
+
+.vid-card:hover{
+    box-shadow: 2px 2px 2px 1px grey;
+}
 .title {
     flex-grow: 1;
     overflow-wrap: break-word;
     word-wrap: break-word;
 }
+
+
+

@@ -8,11 +8,12 @@ except ImportError:
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///favorites.db'
 db = SQLAlchemy(app)
 
 class Streamer(db.Model):
     id = db.Column(db.String, primary_key=True)
+    url = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
     follower_count = db.Column(db.String(120), nullable=False)
@@ -23,7 +24,6 @@ class Streamer(db.Model):
 
     def __repr__(self):
         return f"Streamer(id={self.id}, name='{self.name}', follower_count='{self.follower_count}')"
-
 
 with app.app_context():
   db.create_all()
@@ -54,6 +54,7 @@ def search():
         videos = user_data['video_data'][:5]
         return render_template('results.html',
                             streamer=user_data['name'],
+                            url=user_data['url'],
                             description=user_data['description'],
                             followers=format(user_data['follower_count'], ","),
                             broadcaster_type=user_data['broadcaster_type'],
@@ -75,6 +76,7 @@ def add():
         if not existing_streamer:
             streamer = Streamer(
                 id=user_data['id'],
+                url=user_data['url'],
                 name=user_data['name'],
                 description=user_data['description'],
                 follower_count=format(user_data['follower_count'], ","),
@@ -113,6 +115,7 @@ def get_all_streamers():
     for streamer in streamers:
         streamer_data = {
             'id': streamer.id,
+            'url': streamer.url,
             'name': streamer.name,
             'description': streamer.description,
             'follower_count': streamer.follower_count,

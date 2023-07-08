@@ -51,6 +51,7 @@ def get_user_data(user_name, headers):
 
         user_id = user_data_json['id']
         user_data['id'] = user_id
+        user_data['url'] = 'https://www.twitch.tv/' + user_data_json['login']
         user_data['name'] = user_data_json['display_name']
         user_data['description'] = user_data_json['description']
         user_data['broadcaster_type'] = user_data_json['broadcaster_type']
