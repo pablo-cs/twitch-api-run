@@ -1,13 +1,15 @@
 import git
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, redirect, url_for
+from flask_behind_proxy import FlaskBehindProxy
 try:
     from .twitch_api import generate_headers, get_user_data, get_popular_users, update_sql
 except ImportError:
     from twitch_api import generate_headers, get_user_data, get_popular_users, update_sql
 
 app = Flask(__name__)
-
+proxied = FlaskBehindProxy(app)
+app.config['SECRET_KEY'] = '91062784e313e6292e50dfe09b0ea33e'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///streamers.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'favorites': 'sqlite:///favorites.db',
@@ -19,6 +21,7 @@ class FavoriteStreamer(db.Model):
     __bind_key__ = 'favorites'
     id = db.Column(db.String, primary_key=True)
     url = db.Column(db.String(120), nullable=False)
+    login = db.Column(db.String(20), unique=True, nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
     follower_count = db.Column(db.String(120), nullable=False)
@@ -34,6 +37,7 @@ class PopularStreamer(db.Model):
     __bind_key__ = 'popular'
     id = db.Column(db.String, primary_key=True)
     url = db.Column(db.String(120), nullable=False)
+    login = db.Column(db.String(20), unique=True, nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(120), nullable=False)
     follower_count = db.Column(db.String(120), nullable=False)
@@ -59,6 +63,7 @@ def add_pop():
                     streamer = PopularStreamer(
                         id=user_data['id'],
                         url=user_data['url'],
+                        login=user_data['login'],
                         name=user_data['name'],
                         description=user_data['description'],
                         follower_count=format(user_data['follower_count'], ","),
@@ -70,11 +75,10 @@ def add_pop():
                     db.session.add(streamer)
                     db.session.commit()
 
-add_pop()
 
 @app.route('/')
 def home():
-
+    add_pop()
     return render_template('index.html', streamers=get_streamers('pop'))
 
 @app.route("/update_server", methods=['POST'])
@@ -100,6 +104,7 @@ def search():
         return render_template('results.html',
                             streamer=user_data['name'],
                             url=user_data['url'],
+                            login=user_data['login'],
                             description=user_data['description'],
                             followers=format(user_data['follower_count'], ","),
                             broadcaster_type=user_data['broadcaster_type'],
@@ -122,6 +127,7 @@ def add():
             streamer = FavoriteStreamer(
                 id=user_data['id'],
                 url=user_data['url'],
+                login=user_data['login'],
                 name=user_data['name'],
                 description=user_data['description'],
                 follower_count=format(user_data['follower_count'], ","),
@@ -144,8 +150,7 @@ def remove():
         streamers = get_streamers('fav')
         return render_template('users.html', streamers=streamers)
     else:
-        streamers = get_streamers('pop')
-        return render_template('index.html', streamers=streamers)
+        return redirect(url_for('home'))
 
 @app.route('/view_fav', methods=['GET','POST'])
 def view_fav():
@@ -161,7 +166,7 @@ def view(streamer_type):
     if streamer_type == 'fav':
          return render_template('users.html', streamers=streamers)
     else:
-        return render_template('index.html', streamers=streamers)
+        return redirect(url_for('home'))
 
 def get_streamers(streamer_type):
     if streamer_type == 'fav':
@@ -173,6 +178,7 @@ def get_streamers(streamer_type):
         streamer_data = {
             'id': streamer.id,
             'url': streamer.url,
+            'login': streamer.login,
             'name': streamer.name,
             'description': streamer.description,
             'follower_count': streamer.follower_count,

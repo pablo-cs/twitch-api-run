@@ -3,7 +3,6 @@
     {% if streamer == None %}
         <h2>User Not Found</h2>
     {% else %}
-        
             <br>
             <h2 class="creator-name twitch-style"> <a href="{{ url }}">{{ streamer }}</a> </h2>
             <br>
@@ -20,14 +19,26 @@
             {% endif %}
             <p>{{ description }}</p>
             <div class="profile-container">
-            <img class= "profile-pic profile-item" src={{ img_src }} alt="Profile Pic">
-            
+                <img class= "profile-pic profile-item" src={{ img_src }} alt="Profile Pic">
+                
 
-            <h3 class="profile-item">Followers: {{ followers }}</h3>
-            <h3 class="profile-item">Broadcaster Type: {{ broadcaster_type }}</h3>
-            <h3 class="profile-item">Last Played: {{ last_played }}</h3>
-            <h3 class="profile-item">Member since : {{ created_at }}</h3>
-        </div>
+                <h3 class="profile-item">Followers: {{ followers }}</h3>
+                <h3 class="profile-item">Broadcaster Type: {{ broadcaster_type }}</h3>
+                <h3 class="profile-item">Last Played: {{ last_played }}</h3>
+                <h3 class="profile-item">Member since : {{ created_at }}</h3>
+            </div>
+                <div id="twitch-embed"></div>
+                <!-- Load the Twitch embed JavaScript file -->
+                <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+                <!-- Create a Twitch.Embed object that will render within the "twitch-embed" element -->
+                <script type="text/javascript">
+                new Twitch.Embed("twitch-embed", {
+                    width: 854,
+                    height: 480,
+                    channel: "{{ login }}"
+                });
+                </script>
         {% if videos %}
             <h3>Most Recent Videos:</h3>
             <div class="vid-container">

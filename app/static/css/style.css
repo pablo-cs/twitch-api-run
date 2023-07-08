@@ -7,7 +7,9 @@ body{
     background-color: #624CAB;
     color: #C1CEFE;
 }
-
+a{
+    color: #C1CEFE;
+}
 .twitch-style{
     font-family: 'TwitchyTV', sans-serif;
 }
