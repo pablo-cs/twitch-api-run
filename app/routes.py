@@ -4,10 +4,17 @@ from flask_caching import Cache
 from flask import Flask, render_template, request, redirect, url_for
 from flask_behind_proxy import FlaskBehindProxy
 try:
-    from .twitch_api import generate_headers, get_user_data, get_popular_users
+    from .twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
 except ImportError:
-    from twitch_api import generate_headers, get_user_data, get_popular_users
-
+    from twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '91062784e313e6292e50dfe09b0ea33e'
@@ -18,6 +25,7 @@ app.config['SQLALCHEMY_BINDS'] = {
 }
 db = SQLAlchemy(app)
 cache = Cache(app)
+
 
 class FavoriteStreamer(db.Model):
     __bind_key__ = 'favorites'
@@ -33,9 +41,14 @@ class FavoriteStreamer(db.Model):
     img_src = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
-        return f"Streamer(id={self.id}, name='{self.name}', follower_count='{self.follower_count}')"
+        return (
+            f"Streamer(id={self.id}, "
+            f"name='{self.name}', "
+            f"follower_count='{self.follower_count}')"
+        )
 
-class PopularStreamer(db.Model):
+
+class ActiveStreamer(db.Model):
     __bind_key__ = 'popular'
     id = db.Column(db.String, primary_key=True)
     url = db.Column(db.String(120), nullable=False)
@@ -49,31 +62,39 @@ class PopularStreamer(db.Model):
     img_src = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
-        return f"Streamer(id={self.id}, name='{self.name}', follower_count='{self.follower_count}')"
+        return (
+            f"Streamer(id={self.id}, "
+            f"name='{self.name}', "
+            f"follower_count='{self.follower_count}')"
+        )
+
 
 with app.app_context():
-  db.create_all()
+    db.create_all()
+
 
 @cache.cached(timeout=3600)
 def add_pop():
     with app.app_context():
         headers = generate_headers()
-        pop_data = get_popular_users(headers)
-        for user_data in pop_data:
-            if user_data:
-                existing_streamer = PopularStreamer.query.filter_by(name=user_data['name']).first()
+        pop_data = get_active_streamers(headers)
+        for streamer_data in pop_data:
+            if streamer_data:
+                existing_streamer = ActiveStreamer.query.filter_by(
+                                    name=streamer_data['name']).first()
+                followers = format(streamer_data['follower_count'], ",")
                 if not existing_streamer:
-                    streamer = PopularStreamer(
-                        id=user_data['id'],
-                        url=user_data['url'],
-                        login=user_data['login'],
-                        name=user_data['name'],
-                        description=user_data['description'],
-                        follower_count=format(user_data['follower_count'], ","),
-                        broadcaster_type=user_data['broadcaster_type'],
-                        last_played=user_data['last_game_played'],
-                        created_at=user_data['created_at'],
-                        img_src=user_data['pfp_url']
+                    streamer = ActiveStreamer(
+                        id=streamer_data['id'],
+                        url=streamer_data['url'],
+                        login=streamer_data['login'],
+                        name=streamer_data['name'],
+                        description=streamer_data['description'],
+                        follower_count=followers,
+                        broadcaster_type=streamer_data['broadcaster_type'],
+                        last_played=streamer_data['last_game_played'],
+                        created_at=streamer_data['created_at'],
+                        img_src=streamer_data['pfp_url']
                     )
                     db.session.add(streamer)
                     db.session.commit()
@@ -83,6 +104,7 @@ def add_pop():
 def home():
     add_pop()
     return render_template('index.html', streamers=get_streamers('pop'))
+
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
@@ -94,57 +116,67 @@ def webhook():
     else:
         return 'Wrong event type', 400
 
+
 @app.route('/search', methods=['POST'])
 def search():
+    "Route to search for a streamer using Twitch API"
     if request.form.get('search'):
-        user_name = request.form.get('search') 
+        user_name = request.form.get('search')
     headers = generate_headers()
-    user_data = get_user_data(user_name, headers)
-    if user_data:
-        existing_streamer = FavoriteStreamer.query.filter_by(name=user_data['name']).first()
+    streamer_data = get_streamer_data(user_name, headers)
+    if streamer_data:
+        existing_streamer = FavoriteStreamer.query.filter_by(
+                            name=streamer_data['name']).first()
         streamer_exists = bool(existing_streamer)
-        videos = user_data['video_data'][:5]
-        return render_template('results.html',
-                            streamer=user_data['name'],
-                            url=user_data['url'],
-                            login=user_data['login'],
-                            description=user_data['description'],
-                            followers=format(user_data['follower_count'], ","),
-                            broadcaster_type=user_data['broadcaster_type'],
-                            last_played=user_data['last_game_played'],
-                            created_at=user_data['created_at'],
-                            img_src=user_data['pfp_url'],
-                            videos=videos,
-                            in_db=streamer_exists)
+        videos = streamer_data['video_data'][:5]
+        followers = format(streamer_data['follower_count'], ",")
+        return render_template(
+                'results.html',
+                streamer=streamer_data['name'],
+                url=streamer_data['url'],
+                login=streamer_data['login'],
+                description=streamer_data['description'],
+                followers=followers,
+                broadcaster_type=streamer_data['broadcaster_type'],
+                last_played=streamer_data['last_game_played'],
+                created_at=streamer_data['created_at'],
+                img_src=streamer_data['pfp_url'],
+                videos=videos,
+                in_db=streamer_exists)
     else:
         return render_template('results.html', streamer=None, description=None)
 
+
 @app.route('/add', methods=['POST'])
 def add():
+    "Route to add streamer to FavoriteStreamer database"
     user_name = request.form.get('added_user')
     headers = generate_headers()
-    user_data = get_user_data(user_name, headers)
-    if user_data:
-        existing_streamer = FavoriteStreamer.query.filter_by(name=user_data['name']).first()
+    streamer_data = get_streamer_data(user_name, headers)
+    if streamer_data:
+        existing_streamer = FavoriteStreamer.query.filter_by(
+                            name=streamer_data['name']).first()
         if not existing_streamer:
             streamer = FavoriteStreamer(
-                id=user_data['id'],
-                url=user_data['url'],
-                login=user_data['login'],
-                name=user_data['name'],
-                description=user_data['description'],
-                follower_count=format(user_data['follower_count'], ","),
-                broadcaster_type=user_data['broadcaster_type'],
-                last_played=user_data['last_game_played'],
-                created_at=user_data['created_at'],
-                img_src=user_data['pfp_url']
+                id=streamer_data['id'],
+                url=streamer_data['url'],
+                login=streamer_data['login'],
+                name=streamer_data['name'],
+                description=streamer_data['description'],
+                follower_count=format(streamer_data['follower_count'], ","),
+                broadcaster_type=streamer_data['broadcaster_type'],
+                last_played=streamer_data['last_game_played'],
+                created_at=streamer_data['created_at'],
+                img_src=streamer_data['pfp_url']
             )
             db.session.add(streamer)
             db.session.commit()
     return redirect(url_for('view_fav'))
 
+
 @app.route('/remove', methods=['POST'])
 def remove():
+    "Route to remove a streamer from the FavoriteStreamer database"
     name_to_remove = request.form.get('removed_user')
     streamer = FavoriteStreamer.query.filter_by(name=name_to_remove).first()
     if streamer:
@@ -155,27 +187,31 @@ def remove():
     else:
         return redirect(url_for('home'))
 
-@app.route('/view_fav', methods=['GET','POST'])
+
+@app.route('/view_fav', methods=['GET', 'POST'])
 def view_fav():
     return view('fav')
 
-@app.route('/view_pop', methods=['GET','POST'])
+
+@app.route('/view_pop', methods=['GET', 'POST'])
 def view_pop():
     return view('pop')
 
-@app.route('/view', methods=['GET','POST'])
+
+@app.route('/view', methods=['GET', 'POST'])
 def view(streamer_type):
     streamers = get_streamers(streamer_type)
     if streamer_type == 'fav':
-         return render_template('users.html', streamers=streamers)
+        return render_template('users.html', streamers=streamers)
     else:
         return redirect(url_for('home'))
+
 
 def get_streamers(streamer_type):
     if streamer_type == 'fav':
         streamers = FavoriteStreamer.query.all()
     else:
-        streamers = PopularStreamer.query.all()
+        streamers = ActiveStreamer.query.all()
     streamer_list = []
     for streamer in streamers:
         streamer_data = {
