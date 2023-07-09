@@ -72,6 +72,7 @@ python3 routes.py
 OR
 
 Visit: [here](http://pcrisostomosuarez.pythonanywhere.com/)
+
 Sample Website:
 <div style="display: grid; grid-template-row: repeat(3, 1fr); grid-gap: 10px;">
   <img src="https://github.com/pablo-cs/twitch-api-run/assets/78839198/d67bca39-5812-4576-9e69-0d380e9fa788" style="display: block; max-width: 100%; height: auto;" width="50%" height="50%">
