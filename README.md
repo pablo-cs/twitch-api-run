@@ -77,5 +77,5 @@ Sample Website:
 <div style="display: grid; grid-template-row: repeat(3, 1fr); grid-gap: 10px;">
   <img src="https://github.com/pablo-cs/twitch-api-run/assets/78839198/d67bca39-5812-4576-9e69-0d380e9fa788" style="display: block; max-width: 100%; height: auto;" width="50%" height="50%">
   <img src="https://github.com/pablo-cs/twitch-api-run/assets/78839198/e475eebf-e44f-4817-a4ef-88adc9323dd7" style="display: block; max-width: 100%; height: auto;" width="50%" height="50%">
-  <img src="https://github.com/pablo-cs/twitch-api-run/assets/78839198/019120e6-914e-41c3-a1de-8e61ad9463e4" style="display: block; max-width: 100%; height: auto;" width="50%" height="50%">
+  <img src="https://github.com/pablo-cs/twitch-api-run/assets/78839198/0c655874-b06b-4704-809e-cd5c73a3e70f" style="display: block; max-width: 100%; height: auto;" width="50%" height="50%">
  </div>
