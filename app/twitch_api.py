@@ -106,25 +106,3 @@ def get_popular_users(headers):
     for user in pop_data:
         pop_users.append(get_user_data(user['broadcaster_login'],headers))
     return pop_users
-
-def update_sql(user_data_list):
-    """"
-    Updates the user database to include the streamers
-    added to the list of users
-    """
-    if len(user_data_list) > 0:
-        print('Here are all the streamers you added')
-
-        # Creates dataframes and SQL stuff using a list of users' dictionaries
-        df = pd.DataFrame(user_data_list)
-        df = df.drop('video_data', axis=1)
-        df.to_sql('users', con=engine, if_exists='append', index=False)
-
-        with engine.connect() as connection:
-            columns = "display_name, broadcaster_type, follower_count"
-            query = "SELECT " + columns + " FROM users;"
-            query_result = connection.execute(db.text(query)).fetchall()
-            print(pd.DataFrame(query_result))
-    print('Bye!')
-
-

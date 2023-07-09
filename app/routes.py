@@ -1,11 +1,12 @@
 import git
 from flask_sqlalchemy import SQLAlchemy
+from flask_caching import Cache
 from flask import Flask, render_template, request, redirect, url_for
 from flask_behind_proxy import FlaskBehindProxy
 try:
-    from .twitch_api import generate_headers, get_user_data, get_popular_users, update_sql
+    from .twitch_api import generate_headers, get_user_data, get_popular_users
 except ImportError:
-    from twitch_api import generate_headers, get_user_data, get_popular_users, update_sql
+    from twitch_api import generate_headers, get_user_data, get_popular_users
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -16,6 +17,7 @@ app.config['SQLALCHEMY_BINDS'] = {
     'popular': 'sqlite:///popular_users.db'
 }
 db = SQLAlchemy(app)
+cache = Cache(app)
 
 class FavoriteStreamer(db.Model):
     __bind_key__ = 'favorites'
@@ -52,6 +54,7 @@ class PopularStreamer(db.Model):
 with app.app_context():
   db.create_all()
 
+@cache.cached(timeout=3600)
 def add_pop():
     with app.app_context():
         headers = generate_headers()
