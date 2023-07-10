@@ -19,6 +19,7 @@ except ImportError:
     from models import db, FavoriteStreamer, ActiveStreamer
     from helpers import add_pop, get_streamers
 
+
 def home():
     """
     Returns the homepage for the application

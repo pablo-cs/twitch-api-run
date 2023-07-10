@@ -14,6 +14,7 @@ except ImportError:
     )
     from models import db, FavoriteStreamer, ActiveStreamer
 
+
 def add_pop():
     """
     Adds the currently active streamers to the ActiveStreamer database

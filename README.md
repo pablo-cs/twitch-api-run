@@ -56,9 +56,10 @@ source ~/.bashrc
 ```
 
 ### Install libraries
-Final step, install the following python libraries:
+Final step, install the dependencies in the app directory:
 ```
-pip install twitchAPI pandas requests sqlalchemy pytest
+pip install -r requirements.txt
+
 ```
 
 ## How to Run

@@ -43,4 +43,3 @@ class ActiveStreamer(db.Model):
             f"name='{self.name}', "
             f"follower_count='{self.follower_count}')"
         )
-
