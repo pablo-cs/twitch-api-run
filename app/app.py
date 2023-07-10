@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_behind_proxy import FlaskBehindProxy
 from flask_caching import Cache
-
 try:
     from .twitch_api import (
         generate_headers,
