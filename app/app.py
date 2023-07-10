@@ -58,7 +58,7 @@ app.route('/search', methods=['POST'])(search)
 app.route('/add', methods=['POST'])(add)
 app.route('/remove', methods=['POST'])(remove)
 app.route('/view_fav', methods=['GET', 'POST'])(view_fav)
-app.route('/view_active', methods=['GET', 'POST'])(view_pop)
+app.route('/view_active', methods=['GET', 'POST'])(view_active)
 app.route('/view', methods=['GET', 'POST'])(lambda: view('fav'))
 
 if __name__ == '__main__':
