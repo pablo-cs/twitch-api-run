@@ -1,12 +1,16 @@
 import unittest
 from unittest.mock import patch, Mock
 import requests
-from twitch import get_user_data
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# Import the twitch_api module from the app package
+from app import twitch_api
 
 class TwitchAPITestCase(unittest.TestCase):
 
-    @patch('twitch.requests.get')
+    @patch('app.twitch_api.requests.get')
     def test_get_user_data(self, mock_get):
         # Set up the mock responses
         mock_user_response = {
@@ -68,27 +72,24 @@ class TwitchAPITestCase(unittest.TestCase):
             'Client-Id': 'mock_client_id'
             }
 
-        user_data = get_user_data('twitchdev', headers)
-        print(user_data['follower_count'])
+        streamer_data = twitch_api.get_streamer_data('twitchdev', headers)
+        print(streamer_data['follower_count'])
         # Assert the expected result
-        expected_user_data = {
+        expected_streamer_data = {
             'id': '141981764',
             'login': 'twitchdev',
-            'display_name': 'TwitchDev',
-            'type': '',
+            'name': 'TwitchDev',
+            'url': 'https://www.twitch.tv/twitchdev',
             'broadcaster_type': 'partner',
             'description': 'Supporting third-party developers.',
-            'profile_image_url': 'n/a',
-            'offline_image_url': 'n/a',
-            'view_count': 5980557,
-            'email': 'not-real@email.com',
-            'created_at': '2016-12-14T20:32:28Z',
+            'pfp_url': 'n/a',
             'follower_count': 8,
             'last_game_played': 'Science & Technology',
-            'video_data': []
+            'video_data': [],
+            'created_at': 'December 14, 2016',
         }
 
-        self.assertEqual(user_data, expected_user_data)
+        self.assertEqual(streamer_data, expected_streamer_data)
 
 if __name__ == '__main__':
     unittest.main()
