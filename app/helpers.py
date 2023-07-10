@@ -1,7 +1,18 @@
 from flask import current_app
-from models import db, FavoriteStreamer, ActiveStreamer
-from twitch_api import generate_headers, get_streamer_data, get_active_streamers
-
+try:
+    from .twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
+    from .models import db, FavoriteStreamer, ActiveStreamer
+except ImportError:
+    from twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
+    from models import db, FavoriteStreamer, ActiveStreamer
 
 def add_pop():
     with current_app.app_context():
