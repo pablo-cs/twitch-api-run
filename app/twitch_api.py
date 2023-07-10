@@ -102,6 +102,10 @@ def get_streamer_data(user_name, headers):
 
 
 def get_active_streamers(headers):
+    """
+    Gets the currently active streamers and returns them
+    as a list
+    """
     active_req = requests.get(
                                 BASE_URL + '/search/channels?' +
                                 'query=gaming&live_only=true',

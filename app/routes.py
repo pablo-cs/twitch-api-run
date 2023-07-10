@@ -20,11 +20,17 @@ except ImportError:
     from helpers import add_pop, get_streamers
 
 def home():
+    """
+    Returns the homepage for the application
+    """
     add_pop()
     return render_template('index.html', streamers=get_streamers('pop'))
 
 
 def webhook():
+    """
+    Webhook to automate the pushing of changes to the application repo
+    """
     if request.method == 'POST':
         repo = git.Repo('/home/pcrisostomosuarez/twitch-api-run')
         origin = repo.remotes.origin
@@ -35,7 +41,9 @@ def webhook():
 
 
 def search():
-    # Route to search for a streamer using Twitch API
+    """
+    Returns the webpage of a given streamer, if it exists
+    """
     user_name = request.form.get('search')
     if user_name:
         headers = generate_headers()
@@ -64,7 +72,9 @@ def search():
 
 
 def add():
-    "Route to add streamer to FavoriteStreamer database"
+    """
+    Adds streamer to FavoriteStreamer database
+    """
     user_name = request.form.get('added_user')
     headers = generate_headers()
     streamer_data = get_streamer_data(user_name, headers)
@@ -90,7 +100,9 @@ def add():
 
 
 def remove():
-    "Route to remove a streamer from the FavoriteStreamer database"
+    """
+    Removes a streamer from the FavoriteStreamer database
+    """
     name_to_remove = request.form.get('removed_user')
     streamer = FavoriteStreamer.query.filter_by(name=name_to_remove).first()
     if streamer:
@@ -103,14 +115,23 @@ def remove():
 
 
 def view_fav():
+    """
+    Route to view favorite streamers
+    """
     return view('fav')
 
 
-def view_pop():
-    return view('pop')
+def view_active():
+    """
+    Route to view active streamers
+    """
+    return view('active')
 
 
 def view(streamer_type):
+    """
+    Returns webpage of a set of users
+    """
     streamers = get_streamers(streamer_type)
     if streamer_type == 'fav':
         return render_template('users.html', streamers=streamers)

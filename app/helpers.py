@@ -15,6 +15,9 @@ except ImportError:
     from models import db, FavoriteStreamer, ActiveStreamer
 
 def add_pop():
+    """
+    Adds the currently active streamers to the ActiveStreamer database
+    """
     with current_app.app_context():
         headers = generate_headers()
         pop_data = get_active_streamers(headers)
@@ -41,6 +44,10 @@ def add_pop():
 
 
 def get_streamers(streamer_type):
+    """
+    Gets the streamers from a given database and return
+    as a list of dictionaries
+    """
     if streamer_type == 'fav':
         streamers = FavoriteStreamer.query.all()
     else:
