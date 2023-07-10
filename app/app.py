@@ -1,20 +1,45 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_behind_proxy import FlaskBehindProxy
 from flask_caching import Cache
-from config import Config
-from models import db, FavoriteStreamer, ActiveStreamer
-from twitch_api import generate_headers, get_streamer_data, get_active_streamers
-from routes import (
-    home,
-    webhook,
-    search,
-    add,
-    remove,
-    view_fav,
-    view_pop,
-    view
-)
-from helpers import add_pop, get_streamers
+
+try:
+    from .twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
+    from .config import Config
+    from .models import db, FavoriteStreamer, ActiveStreamer
+    from .routes import (
+        home,
+        webhook,
+        search,
+        add,
+        remove,
+        view_fav,
+        view_pop,
+        view
+    )
+    from .helpers import add_pop, get_streamers
+except ImportError:
+    from twitch_api import (
+        generate_headers,
+        get_streamer_data,
+        get_active_streamers
+    )
+    from config import Config
+    from models import db, FavoriteStreamer, ActiveStreamer
+    from routes import (
+        home,
+        webhook,
+        search,
+        add,
+        remove,
+        view_fav,
+        view_pop,
+        view
+    )
+    from helpers import add_pop, get_streamers
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)

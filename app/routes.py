@@ -9,6 +9,7 @@ try:
         get_active_streamers
     )
     from .models import db, FavoriteStreamer, ActiveStreamer
+    from .helpers import add_pop, get_streamers
 except ImportError:
     from twitch_api import (
         generate_headers,
@@ -16,7 +17,7 @@ except ImportError:
         get_active_streamers
     )
     from models import db, FavoriteStreamer, ActiveStreamer
-from helpers import add_pop, get_streamers
+    from helpers import add_pop, get_streamers
 
 def home():
     add_pop()
